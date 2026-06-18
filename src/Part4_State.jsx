@@ -14,7 +14,7 @@
 //   - For EXPLAIN tasks, write your answer as a comment below the prompt
 // ============================================================
 
-import { useState } from 'react'
+import { use, useState } from 'react'
 
 
 // ------------------------------------------------------------
@@ -46,6 +46,7 @@ import { useState } from 'react'
 function Counter() {
   // A1.
   // Declare a state variable called count with an initial value of 0.
+  let [count, setCount] = useState(0)
   //
   // Why: useState gives you two things — the current value, and a function
   //      to update it. When you call the update function, React re-renders
@@ -64,9 +65,10 @@ function Counter() {
   return (
     <div>
       {/* A1: remove the hardcoded 0 with the state */}
-      <h3>Count: 0</h3>
+      <h3>Count: {count}</h3>
       {/* A2: Add 1 button */}
-
+      <button onClick={()=> setCount(count+1)}>Add 1</button>
+      <button onClick={()=> setCount(0)}>Reset</button>
       {/* A3: Reset button */}
 
     </div>
@@ -104,6 +106,7 @@ function MoodPicker() {
   // B1.
   // Declare a state variable called mood with an initial value of your choice
   // (a string, like "neutral").
+let [mood, setMood] = useState("neutral")  
 
   // B2.
   // Add three buttons: "Happy", "Sad", and "Excited".
@@ -127,8 +130,12 @@ function MoodPicker() {
   return (
     <div>
       {/* B2: three buttons go here */}
+      <button onClick={()=>setMood("Sad")}>Sad</button>
+      <button onClick={()=>setMood("Happy")}>Happy</button>
+      <button onClick={()=>setMood("Excited")}>Excited</button>
 
       {/* B3: mood display goes here */}
+      <p>Current Mood: {mood}</p>
 
     </div>
   )
@@ -158,7 +165,7 @@ function SectionB() {
 function NameInput() {
   // C1.
   // Declare a state variable called inputValue. Choose an appropriate initial value.
-
+  let [input, setInput] = useState('')
   // C2.
   // Add an input element.
   // Wire it up so that every keystroke updates the state variable.
@@ -181,8 +188,13 @@ function NameInput() {
   return (
     <div>
       {/* C2: input goes here */}
+      <input type="text" value={input} onChange={(e)=>{
+        console.log(e.target)
+        setInput(e.target.value)
+      }}/>
 
       {/* C3: display text goes here */}
+      <p>{input}</p>
 
     </div>
   )
@@ -211,7 +223,7 @@ function SectionC() {
 function Toggle() {
   // D1.
   // Declare a state variable called isVisible with an initial value of false.
-
+  let [isVisible, setIsVisible] = useState(false)
   // D2.
   // Add a button that toggles isVisible between true and false when clicked.
   // The button label should change based on the current state —
@@ -237,13 +249,21 @@ function Toggle() {
   //          When would you use one over the other?
   //
   //          answer:
+  let text;
+  if(isVisible){
+    text = "Visible"
+  }else{
+    text = "Invisible"
+  }
+
 
   return (
     <div>
       {/* D2: button goes here */}
-
+      <button onClick={()=>setIsVisible(!isVisible)}>{text}</button>
       {/* D3 / D4: conditional message goes here */}
-
+      {isVisible && <p>Now You See Me!!</p>}
+      {isVisible ? <p>Now you See Me!!</p>:<p>I am Hidden</p>}
     </div>
   )
 }
@@ -269,7 +289,7 @@ function SectionD() {
 //   function passed down the same way.
 // ------------------------------------------------------------
 
-function LightSwitchButton(/* E3: accept a prop here */) {
+function LightSwitchButton(props) {
   // E3.
   // This component should accept one prop — a function.
   // Render a single button. When clicked, it should call that function.
@@ -278,6 +298,7 @@ function LightSwitchButton(/* E3: accept a prop here */) {
   return (
     <div>
       {/* E3: button goes here */}
+      <button onClick={()=>props.toggle()}></button>
 
     </div>
   )
@@ -286,10 +307,12 @@ function LightSwitchButton(/* E3: accept a prop here */) {
 function LightSwitch() {
   // E1.
   // Declare a state variable called isOn with an initial value of false.
-
+  let [isOn, setIsON] = useState(false)
   // E2.
   // Write a function that flips isOn to the opposite value.
-
+  function toggle(){
+    isOn?setIsON(false):setIsON(true)
+  }
   // E4.
   // Render LightSwitchButton below, passing your flip function from E2
   // to it as a prop.
@@ -309,8 +332,10 @@ function LightSwitch() {
   return (
     <div>
       {/* E5: on/off sentence goes here */}
+      {isOn?<p>Light is ON</p>:<p>Light is Off</p>}
 
       {/* E4: LightSwitchButton goes here */}
+      <LightSwitchButton toggle={toggle}></LightSwitchButton>
 
     </div>
   )
